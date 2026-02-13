@@ -1,48 +1,48 @@
 /**
- * Orden recomendado para la configuración de una app Express:
+ * Recommended order for configuring an Express app:
  *
- * 1. Middlewares globales (por ejemplo, app.use(express.json()), cors, etc.)
- * 2. Routers o middlewares específicos (por ejemplo, app.use('/teachers', teachersRoutes))
- * 3. Rutas específicas (por ejemplo, app.get('/'), app.post('/login'), etc.)
- * 4. app.listen() para iniciar el servidor
+ * 1. Global middlewares (e.g., app.use(express.json()), cors, etc.)
+ * 2. Routers or specific middlewares (e.g., app.use('/teachers', teachersRoutes))
+ * 3. Specific routes (e.g., app.get('/'), app.post('/login'), etc.)
+ * 4. app.listen() to start the server
  *
- * Este orden asegura que:
- * - Todas las peticiones pasen primero por los middlewares y routers.
- * - Las rutas específicas estén disponibles después de aplicar los middlewares.
- * - El servidor comience a escuchar solo cuando todo está correctamente configurado.
+ * This order ensures:
+ * - All requests go through middlewares and routers first.
+ * - Specific routes are available after applying middlewares.
+ * - The server starts listening only when everything is properly configured.
  */
 
-// Importa el módulo express (framework para crear servidores web)
+// Import the express module (framework for building web servers)
 import express from 'express';
-// Importa el router de profesores
+// Import the teachers router
 import teachersRoutes from './routes/teachersRoutes.js';
 
-// Crea una instancia de la aplicación Express (app principal de la API)
+// Create an instance of the Express application (main API app)
 const app = express();
 
-// Middleware para procesar datos JSON en las peticiones (convierte el body JSON en objeto JS)
+// Middleware to process JSON data in requests (converts JSON body to JS object)
 app.use(express.json());
 
-// Usa el router de profesores bajo el prefijo '/teachers'
+// Use the teachers router under the '/teachers' prefix
 app.use('/teachers', teachersRoutes);
 
-// Ruta de ejemplo: responde a solicitudes GET en la raíz "/"
-// app.get define una ruta para el método HTTP GET
+// Example route: responds to GET requests at the root "/"
+// app.get defines a route for the HTTP GET method
 app.get('/', (req, res) => {
-  // res.send envía una respuesta al cliente
-  res.send('API RESTful funcionando');
+  // res.send sends a response to the client
+  res.send('API RESTful running');
 });
 
-// Define el puerto en el que se ejecutará el servidor (por defecto 3000)
-// process.env.PORT permite usar un puerto definido en variables de entorno
+// Define the port where the server will run (default 3000)
+// process.env.PORT allows using a port defined in environment variables
 const PORT = process.env.PORT || 3000;
 
-// Inicia el servidor y lo pone a escuchar en el puerto definido
-// app.listen inicia el servidor y ejecuta el callback cuando está listo
+// Start the server and listen on the defined port
+// app.listen starts the server and runs the callback when ready
 app.listen(PORT, () => {
-  // console.log muestra un mensaje en la consola cuando el servidor está activo
-  console.log(`Servidor escuchando en puerto ${PORT}`);
+  // console.log shows a message in the console when the server is active
+  console.log(`Server listening on port ${PORT}`);
 });
 
-// Exporta la instancia de la aplicación (útil para pruebas o modularización)
+// Export the app instance (useful for testing or modularization)
 export default app;

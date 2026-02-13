@@ -1,76 +1,76 @@
-# DOCUMENT.md
+# Project Documentation
 
-## Descripción del proyecto
+## Project Description
 
-API RESTful para gestionar datos de estudiantes y profesores usando Node.js, Express y ESM (ECMAScript Modules).
+RESTful API to manage student and teacher data using Node.js, Express, and ESM (ECMAScript Modules).
 
-La arquitectura del proyecto se va a basar en el patrón MVC (Modelo-Vista-Controlador), separando la lógica de negocio, las rutas y el modelado de datos para facilitar el mantenimiento y la escalabilidad.
+The project architecture is based on the MVC (Model-View-Controller) pattern, separating business logic, routes, and data modeling to facilitate maintenance and scalability.
 
-## Preparación del ambiente
+## Environment Setup
 
-1. Verificar que Node.js esté instalado: `node -v`
-2. Crear el archivo `package.json`: `npm init -y`
-3. Instalar Express.js: `npm install express`
-4. Instalar cors: `npm install cors`
-5. Configurar package.json para usar ESM:
-   - Cambiar "type": "commonjs" por "type": "module"
+1. Make sure Node.js is installed: `node -v`
+2. Create the `package.json` file: `npm init -y`
+3. Install Express.js: `npm install express`
+4. Install cors: `npm install cors`
+5. Configure package.json to use ESM:
+   - Change `"type": "commonjs"` to `"type": "module"`
 
-## Código principal (index.js)
+## Main Code (index.js)
 
 ```javascript
-// Importa el módulo express
+// Import the express module
 import express from 'express';
 
-// Crea una instancia de la aplicación Express
+// Create an instance of the Express application
 const app = express();
 
-// Middleware para procesar datos JSON en las peticiones
+// Middleware to process JSON data in requests
 app.use(express.json());
 
-// Ruta de ejemplo: responde a solicitudes GET en la raíz "/"
+// Example route: responds to GET requests at the root "/"
 app.get('/', (req, res) => {
-  // Envía un mensaje de confirmación
-  res.send('API RESTful funcionando');
+  // Sends a confirmation message
+  res.send('API RESTful running');
 });
 
-// Define el puerto en el que se ejecutará el servidor (por defecto 3000)
+// Define the port where the server will run (default 3000)
 const PORT = process.env.PORT || 3000;
 
-// Inicia el servidor y lo pone a escuchar en el puerto definido
+// Start the server and listen on the defined port
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en puerto ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
 
-// Exporta la instancia de la aplicación (útil para pruebas o modularización)
+// Export the app instance (useful for testing or modularization)
 export default app;
 ```
 
-## Notas
-- El proyecto está configurado para usar módulos ESM ("type": "module" en package.json).
-- El servidor escucha en el puerto 3000 por defecto.
-- express.json() permite recibir y procesar datos JSON en las peticiones.
-- Se recomienda definir rutas y middlewares antes de app.listen.
+## Notes
+- The project is configured to use ESM modules (`"type": "module"` in package.json).
+- The server listens on port 3000 by default.
+- `express.json()` allows receiving and processing JSON data in requests.
+- It is recommended to define routes and middlewares before `app.listen`.
 
-## Próximos pasos
-- Agregar rutas para estudiantes y profesores.
-- Integrar TypeORM y MySQL para persistencia de datos.
-- Implementar pruebas con Postman.
-- Documentar workflows de agentes para organización del desarrollo.
+## Next Steps
+- Add routes for students and teachers.
+- Integrate TypeORM and MySQL for data persistence.
+- Implement tests with Postman.
+- Document agent workflows for development organization.
 
-## Workflows de agentes
+## Agent Workflows
 
-- architect.md: Define estructura, tecnologías y patrones.
-- backend.md: Implementa API, rutas, lógica y conexión a base de datos.
-- database.md: Modela entidades, migraciones y relaciones.
-- tester.md: Prueba endpoints y funcionalidades.
-- reviewer.md: Revisa calidad y buenas prácticas.
-- frontend.md, i18n.md: Opcionales para futuras integraciones.
+- architect.md: Defines structure, technologies, and patterns.
+- backend.md: Implements API, routes, logic, and database connection.
+- database.md: Models entities, migrations, and relationships.
+- tester.md: Tests endpoints and functionalities.
+- reviewer.md: Reviews code quality and best practices.
+- frontend.md, i18n.md: Optional for future integrations.
 
-## Ejemplo de pregunta a un agente
+## Example of a question to an agent
 
-@backend ¿Cómo valido los datos de entrada en el endpoint de estudiantes?
-@database ¿Cómo hago una migración para agregar un campo a la tabla profesores?
+@backend How do I validate input data in the students endpoint?
+@database How do I create a migration to add a field to the teachers table?
 
 ---
 
-Este documento se irá actualizando conforme avance el desarrollo.
+This document will be updated as development progresses.
