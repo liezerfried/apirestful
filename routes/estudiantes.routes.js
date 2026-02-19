@@ -14,20 +14,20 @@ router.get('/', (req, res) => {
 // Ruta POST para crear un nuevo estudiante: Crea un nuevo estudiante. 
 // No necesita un id porque el estudiante aún no existe; el servidor lo genera.
 router.post('/', (req, res) => {
-  res.json({ message: 'Estudiante creado', data: req.body });
+  res.json({ message: 'Estudiante creado', data: req.body }); // en el body se espera un JSON con los datos del nuevo estudiante
 });
 
-// Ruta PUT para actualizar un estudiante existente: Actualiza un estudiante existente. 
-// Necesita el id para saber cuál estudiante modificar.
-router.put('/:id', (req, res) => {
-  res.json({ message: `Estudiante con id ${req.params.id} actualizado`, data: req.body });
-});
-
-// Ruta DELETE para eliminar un estudiante: Elimina un estudiante. 
-// Necesita el id para saber cuál estudiante borrar.
-router.delete('/:id', (req, res) => {
-  res.json({ message: `Estudiante con id ${req.params.id} eliminado` });
-});
+// Rutas para operaciones con un estudiante específico (GET, PUT, DELETE) usando router.route() para agruparlas
+router.route('/:id')
+      .get((req, res) => {
+        res.json({ message: `Estudiante con id ${req.params.id}` });
+      })
+      .put((req, res) => {
+        res.json({ message: `Estudiante con id ${req.params.id} actualizado`, data: req.body });
+      })
+      .delete((req, res) => {
+        res.json({ message: `Estudiante con id ${req.params.id} eliminado` });
+      });
 
 // Exporta el router para usarlo en otros archivos (por ejemplo, en index.js)
 export default router;
