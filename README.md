@@ -15,7 +15,7 @@ The project architecture is based on the MVC (Model-View-Controller) pattern, se
 5. Configure package.json to use ESM:
    - Change `"type": "commonjs"` to `"type": "module"`
 
-## Main Code (index.js)
+## Main Code (app.js)
 
 ```javascript
 // Import the express module

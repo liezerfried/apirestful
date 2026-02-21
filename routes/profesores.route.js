@@ -29,5 +29,5 @@ router.route('/:id')
         res.json({ message: `Profesor con id ${req.params.id} eliminado` });
       });
 
-// Exporta el router para usarlo en otros archivos (por ejemplo, en index.js)
+// Exporta el router para usarlo en otros archivos (por ejemplo, en app.js)
 export default router;

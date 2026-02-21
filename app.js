@@ -16,10 +16,10 @@
 import express from 'express';
 
 // Importa el ruteador de estudiantes
-import estudiantesRoutes from './routes/estudiantes.routes.js';
+import estudiantesRoutes from './routes/estudiantes.route.js';
 
 // Importa el ruteador de profesores
-import profesoresRoutes from './routes/profesores.routes.js';
+import profesoresRoutes from './routes/profesores.route.js';
 
 // Crea una instancia de la aplicación Express (app principal de la API)
 const app = express();
