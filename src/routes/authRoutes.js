@@ -1,3 +1,19 @@
+// ============================================================================
+// authRoutes.js — Rutas públicas de autenticación
+// ============================================================================
+// Define las rutas que NO requieren autenticación (cualquiera puede acceder):
+//   POST /api/auth/register → Crear cuenta nueva
+//   POST /api/auth/login    → Iniciar sesión y obtener JWT
+//
+// Cada ruta pasa por una cadena de middleware antes de llegar al controlador:
+//   sanitizeInput → validationRules → handleValidationErrors → controller
+//
+// Este patrón de "cadena de middleware" es una característica central de Express:
+// cada función procesa la request y llama a next() para pasar al siguiente.
+//
+// Exporta: router (usado en routes/index.js)
+// ============================================================================
+
 import express from 'express';
 import { register, login } from '../controllers/authController.js';
 import { registerValidation, loginValidation } from '../utils/validators.js';

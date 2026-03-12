@@ -1,0 +1,58 @@
+/* ============================================================================
+   styles.css — Estilos del panel de pruebas de la API
+   ============================================================================
+   Tema oscuro (dark mode) con paleta basada en Tailwind CSS (slate/sky).
+   Layout responsive con CSS Grid: 2 columnas en desktop, 1 en móvil.
+   ============================================================================ */
+
+/* --- RESET Y BASE --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+
+/* --- HEADER --- */
+header { background: #1e293b; padding: 1rem 2rem; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 1rem; }
+header h1 { font-size: 1.3rem; color: #38bdf8; }
+header span { font-size: 0.85rem; color: #94a3b8; }
+
+/* --- LAYOUT GRID: 2 columnas en desktop --- */
+.container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+/* --- TARJETAS DE ENDPOINT --- */
+.card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 1.5rem; }
+.card h2 { font-size: 1.1rem; margin-bottom: 1rem; color: #38bdf8; display: flex; align-items: center; gap: 0.5rem; }
+.card h2 .method { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+/* --- BADGES DE MÉTODO HTTP (colores semánticos) --- */
+.method-post { background: #166534; color: #4ade80; }   /* Verde: crear recurso */
+.method-get { background: #1e40af; color: #60a5fa; }     /* Azul: leer recurso */
+.method-put { background: #854d0e; color: #facc15; }     /* Amarillo: actualizar */
+.method-delete { background: #991b1b; color: #fca5a5; }  /* Rojo: eliminar */
+
+/* --- FORMULARIOS --- */
+label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.3rem; margin-top: 0.8rem; }
+input { width: 100%; padding: 0.6rem 0.8rem; background: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #e2e8f0; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+input:focus { border-color: #38bdf8; }
+
+/* --- BOTONES DE ACCIÓN (color por tipo de operación) --- */
+button { margin-top: 1rem; width: 100%; padding: 0.7rem; border: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+button:hover { opacity: 0.85; }
+.btn-register { background: #22c55e; color: #052e16; }
+.btn-login { background: #3b82f6; color: #fff; }
+.btn-get { background: #60a5fa; color: #1e3a5f; }
+.btn-put { background: #eab308; color: #422006; }
+.btn-delete { background: #ef4444; color: #fff; }
+
+/* --- CAJA DE RESPUESTA JSON (muestra la respuesta de la API) --- */
+.response-box { margin-top: 1rem; background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 0.8rem; font-family: 'Consolas', monospace; font-size: 0.8rem; max-height: 200px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; color: #94a3b8; }
+.response-box.success { border-color: #22c55e; color: #4ade80; }  /* Borde verde si la respuesta fue exitosa */
+.response-box.error { border-color: #ef4444; color: #fca5a5; }    /* Borde rojo si hubo error */
+
+/* --- BARRA DE TOKEN JWT (ocupa ancho completo con grid-column: 1 / -1) --- */
+.token-bar { grid-column: 1 / -1; background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.token-bar h3 { color: #facc15; font-size: 0.95rem; white-space: nowrap; }
+.token-bar input { flex: 1; font-family: 'Consolas', monospace; font-size: 0.8rem; }
+.token-bar button { width: auto; margin-top: 0; padding: 0.5rem 1rem; background: #475569; color: #e2e8f0; font-size: 0.8rem; }
+
+.full-width { grid-column: 1 / -1; }
+
+/* --- RESPONSIVE: 1 columna en pantallas menores a 700px --- */
+@media (max-width: 700px) { .container { grid-template-columns: 1fr; } .token-bar { grid-column: 1; } .full-width { grid-column: 1; } }

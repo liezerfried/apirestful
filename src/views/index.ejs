@@ -1,0 +1,194 @@
+<!--
+  ============================================================================
+  index.ejs — Panel de pruebas de la API (Frontend)
+  ============================================================================
+  Interfaz web para probar todos los endpoints de la API sin necesidad de
+  herramientas externas como Postman o cURL.
+
+  Usa EJS (Embedded JavaScript) como motor de plantillas: las etiquetas
+  <%%= variable %> se reemplazan por valores enviados desde el servidor.
+
+  Secciones:
+    1. Token Bar:     Muestra/almacena el JWT obtenido del login
+    2. Register:      Formulario para crear cuenta (POST /api/auth/register)
+    3. Login:         Formulario para iniciar sesión (POST /api/auth/login)
+    4. Get Profile:   Botón para ver perfil (GET /api/users/profile)
+    5. Update Profile: Formulario para actualizar datos (PUT /api/users/profile)
+    6. Delete Profile: Botón para eliminar cuenta (DELETE /api/users/profile)
+
+  El JavaScript al final realiza las peticiones fetch() a la API,
+  adjuntando automáticamente el token JWT en el header Authorization.
+  ============================================================================
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Título dinámico: EJS reemplaza <%= title %> por el valor enviado desde app.js -->
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header>
+    <h1>🚀 API RESTful</h1>
+    <span>Panel de pruebas — Gestión de usuarios con JWT</span>
+</header>
+
+<div class="container">
+
+    <!-- TOKEN BAR -->
+    <div class="token-bar">
+        <h3>🔑 JWT Token</h3>
+        <input type="text" id="tokenInput" placeholder="El token se guardará aquí automáticamente al hacer login..." readonly>
+        <button onclick="clearToken()">Limpiar</button>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="card">
+        <h2><span class="method method-post">POST</span> Registro — /api/auth/register</h2>
+        <label for="regName">Nombre</label>
+        <input type="text" id="regName" placeholder="Juan Pérez">
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" placeholder="juan@email.com">
+        <label for="regPassword">Contraseña</label>
+        <input type="password" id="regPassword" placeholder="mínimo 6 caracteres">
+        <button class="btn-register" onclick="doRegister()">Registrarse</button>
+        <div class="response-box" id="regResponse">Esperando...</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="card">
+        <h2><span class="method method-post">POST</span> Login — /api/auth/login</h2>
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="juan@email.com">
+        <label for="loginPassword">Contraseña</label>
+        <input type="password" id="loginPassword" placeholder="tu contraseña">
+        <button class="btn-login" onclick="doLogin()">Iniciar Sesión</button>
+        <div class="response-box" id="loginResponse">Esperando...</div>
+    </div>
+
+    <!-- GET PROFILE -->
+    <div class="card">
+        <h2><span class="method method-get">GET</span> Mi Perfil — /api/users/profile</h2>
+        <p style="font-size:0.85rem; color:#94a3b8;">Requiere token JWT (se usa automáticamente)</p>
+        <button class="btn-get" onclick="doGetProfile()">Obtener Perfil</button>
+        <div class="response-box" id="profileResponse">Esperando...</div>
+    </div>
+
+    <!-- UPDATE PROFILE -->
+    <div class="card">
+        <h2><span class="method method-put">PUT</span> Actualizar Perfil — /api/users/profile</h2>
+        <label for="updName">Nuevo nombre (opcional)</label>
+        <input type="text" id="updName" placeholder="Nuevo nombre">
+        <label for="updEmail">Nuevo email (opcional)</label>
+        <input type="email" id="updEmail" placeholder="nuevo@email.com">
+        <label for="updPassword">Nueva contraseña (opcional)</label>
+        <input type="password" id="updPassword" placeholder="nueva contraseña">
+        <button class="btn-put" onclick="doUpdateProfile()">Actualizar</button>
+        <div class="response-box" id="updateResponse">Esperando...</div>
+    </div>
+
+    <!-- DELETE PROFILE -->
+    <div class="card full-width">
+        <h2><span class="method method-delete">DELETE</span> Eliminar Cuenta — /api/users/profile</h2>
+        <p style="font-size:0.85rem; color:#fca5a5; margin-bottom: 0.5rem;">⚠️ Esta acción es irreversible. Se eliminará tu cuenta permanentemente.</p>
+        <button class="btn-delete" onclick="doDeleteProfile()">Eliminar Mi Cuenta</button>
+        <div class="response-box" id="deleteResponse">Esperando...</div>
+    </div>
+
+</div>
+
+<!-- ==================== SCRIPTS DE LA API ==================== -->
+<!-- Funciones JavaScript para comunicarse con la API REST usando fetch() -->
+<script>
+    // Base URL de la API (se construye dinámicamente para funcionar en cualquier puerto)
+    const API = window.location.origin + '/api';
+
+    function getToken() {
+        return document.getElementById('tokenInput').value;
+    }
+
+    function setToken(token) {
+        document.getElementById('tokenInput').value = token;
+    }
+
+    function clearToken() {
+        document.getElementById('tokenInput').value = '';
+    }
+
+    function showResponse(elementId, data, ok) {
+        const el = document.getElementById(elementId);
+        el.textContent = JSON.stringify(data, null, 2);
+        el.className = 'response-box ' + (ok ? 'success' : 'error');
+    }
+
+    // Función genérica para llamar a cualquier endpoint de la API.
+    // Adjunta automáticamente el token JWT (si existe) en el header Authorization.
+    // Muestra la respuesta formateada en el elemento indicado por responseId.
+    async function apiCall(method, path, body, responseId) {
+        const headers = { 'Content-Type': 'application/json' };
+        const token = getToken();
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+
+        try {
+            const res = await fetch(API + path, {
+                method,
+                headers,
+                body: body ? JSON.stringify(body) : undefined
+            });
+            const data = await res.json();
+            showResponse(responseId, data, res.ok);
+            return { data, ok: res.ok };
+        } catch (err) {
+            showResponse(responseId, { error: err.message }, false);
+            return { data: null, ok: false };
+        }
+    }
+
+    async function doRegister() {
+        const body = {
+            name: document.getElementById('regName').value,
+            email: document.getElementById('regEmail').value,
+            password: document.getElementById('regPassword').value
+        };
+        await apiCall('POST', '/auth/register', body, 'regResponse');
+    }
+
+    // Login: si la respuesta incluye un token, lo guarda automáticamente
+    // en el input de token para que las siguientes peticiones lo usen.
+    async function doLogin() {
+        const body = {
+            email: document.getElementById('loginEmail').value,
+            password: document.getElementById('loginPassword').value
+        };
+        const { data, ok } = await apiCall('POST', '/auth/login', body, 'loginResponse');
+        if (ok && data && data.token) {
+            setToken(data.token);
+        }
+    }
+
+    async function doGetProfile() {
+        await apiCall('GET', '/users/profile', null, 'profileResponse');
+    }
+
+    async function doUpdateProfile() {
+        const body = {};
+        const name = document.getElementById('updName').value;
+        const email = document.getElementById('updEmail').value;
+        const password = document.getElementById('updPassword').value;
+        if (name) body.name = name;
+        if (email) body.email = email;
+        if (password) body.password = password;
+        await apiCall('PUT', '/users/profile', body, 'updateResponse');
+    }
+
+    async function doDeleteProfile() {
+        if (!confirm('¿Estás seguro de que quieres eliminar tu cuenta?')) return;
+        await apiCall('DELETE', '/users/profile', null, 'deleteResponse');
+    }
+</script>
+
+</body>
+</html>

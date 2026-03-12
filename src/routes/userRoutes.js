@@ -1,3 +1,18 @@
+// ============================================================================
+// userRoutes.js — Rutas privadas de usuario (requieren JWT)
+// ============================================================================
+// Define las rutas protegidas para gestión del perfil del usuario:
+//   GET    /api/users/profile → Ver mi perfil
+//   PUT    /api/users/profile → Actualizar mi perfil
+//   DELETE /api/users/profile → Eliminar mi cuenta
+//
+// router.use(authenticateToken) aplica el middleware de autenticación
+// a TODAS las rutas de este router. Esto significa que cualquier petición
+// a /api/users/* debe incluir un header "Authorization: Bearer <token>".
+//
+// Exporta: router (usado en routes/index.js)
+// ============================================================================
+
 import express from 'express';
 import { getProfile, updateProfile, deleteProfile } from '../controllers/userController.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';

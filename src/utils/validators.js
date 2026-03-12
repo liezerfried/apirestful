@@ -1,3 +1,29 @@
+// ============================================================================
+// validators.js — Reglas de validación con express-validator
+// ============================================================================
+// Define las reglas de validación para cada ruta usando express-validator.
+// Cada exportación es un array de reglas que se pasa como middleware en las rutas.
+//
+// express-validator usa el patrón "builder" (encadenamiento de métodos):
+//   body('campo').trim().notEmpty().isLength({ min: 2 })...
+//
+// Métodos clave usados:
+//   - trim():           Elimina espacios al inicio/final
+//   - notEmpty():       El campo no puede estar vacío
+//   - isEmail():        Verifica formato de email válido
+//   - normalizeEmail(): Estandariza el email (ej: mayúsculas → minúsculas)
+//   - isLength():       Valida largo mínimo/máximo
+//   - matches():        Valida contra una expresión regular (regex)
+//   - optional():       El campo es opcional (solo valida si está presente)
+//   - withMessage():    Mensaje de error personalizado si la regla falla
+//
+// Estas reglas NO envían respuesta; solo acumulan errores que luego
+// handleValidationErrors() (validation.js) revisa y responde.
+//
+// Exporta: { registerValidation, loginValidation, updateProfileValidation, 
+//            idValidation, emailValidation, passwordValidation }
+// ============================================================================
+
 import { body } from 'express-validator';
 
 // ======================================
@@ -28,6 +54,12 @@ export const registerValidation = [
     body('password')
         .isLength({ min: 6 })
         .withMessage('La contraseña debe tener al menos 6 caracteres')
+        // Regex con lookaheads ("mirar adelante"):
+        //   (?=.*[a-z]) → Debe haber al menos 1 minúscula en algún lugar
+        //   (?=.*[A-Z]) → Debe haber al menos 1 mayúscula en algún lugar
+        //   (?=.*\d)    → Debe haber al menos 1 dígito en algún lugar
+        // Los lookaheads verifican condiciones SIN consumir caracteres,
+        // lo que permite verificar múltiples reglas en una sola regex.
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
         .withMessage('La contraseña debe contener al menos: 1 minúscula, 1 mayúscula y 1 número')
 ];

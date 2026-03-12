@@ -1,5 +1,26 @@
+// ============================================================================
+// userController.js — Controlador de Perfil de Usuario
+// ============================================================================
+// Gestiona las operaciones CRUD sobre el perfil del usuario AUTENTICADO.
+// Todas las funciones asumen que el middleware authenticateToken ya verificó
+// el JWT y colocó el usuario en req.user.
+//
+// Funciones exportadas:
+//   - getProfile():    Obtiene los datos del usuario autenticado
+//   - updateProfile(): Actualiza nombre, email y/o contraseña
+//   - deleteProfile(): Elimina la cuenta permanentemente
+//
+// Importante: cada usuario solo puede ver/modificar/eliminar SU PROPIO perfil.
+// El userId se obtiene de req.user.id (del token JWT), NO del body/params,
+// lo que impide que un usuario modifique datos de otro.
+// ============================================================================
+
 import { User } from '../models/index.js';
 
+// --- OBTENER PERFIL ---
+// req.user.id viene del middleware authenticateToken (extraído del JWT).
+// Se busca en BD por primary key para obtener datos frescos (el token
+// podría haberse emitido hace horas y los datos pueden haber cambiado).
 // GET /api/users/profile - Ver perfil del usuario autenticado
 export const getProfile = async (req, res, next) => {
     console.log(`[CONTROLLER:User] Obteniendo perfil → userId: ${req.user.id}`);
@@ -27,6 +48,9 @@ export const getProfile = async (req, res, next) => {
     }
 };
 
+// --- ACTUALIZAR PERFIL ---
+// Solo se actualizan los campos que el usuario envió en el body.
+// Los campos no enviados se ignoran (actualización parcial).
 // PUT /api/users/profile - Actualizar perfil del usuario autenticado
 export const updateProfile = async (req, res, next) => {
     console.log(`[CONTROLLER:User] Actualizando perfil → userId: ${req.user.id}`);
@@ -44,6 +68,8 @@ export const updateProfile = async (req, res, next) => {
             });
         }
         
+        // Construir objeto dinámico: solo incluye campos que llegaron en el body.
+        // Esto permite actualización parcial (ej: solo cambiar el nombre).
         // Preparar datos para actualizar (solo campos que llegaron)
         const updateData = {};
         
@@ -51,6 +77,9 @@ export const updateProfile = async (req, res, next) => {
         if (email !== undefined) updateData.email = email;
         if (password !== undefined) updateData.password = password; // Se encriptará automáticamente por el hook
         
+        // SEGURIDAD: verificar que el nuevo email no esté ya registrado por otro usuario.
+        // Solo se verifica si el email cambió (email !== user.email), para evitar
+        // consultas innecesarias cuando el usuario envía su mismo email.
         // Verificar si el email ya existe (si se está actualizando)
         if (email && email !== user.email) {
             const existingUser = await User.findOne({ where: { email } });
@@ -66,6 +95,9 @@ export const updateProfile = async (req, res, next) => {
         console.log(`[CONTROLLER:User] Aplicando cambios en BD...`);
         await user.update(updateData);
         
+        // Se hace una nueva consulta (findByPk) después del update para obtener
+        // los datos actualizados y frescos de la BD, incluyendo cualquier
+        // transformación aplicada por hooks o la base de datos.
         const updatedUser = await User.findByPk(userId);
         
         console.log(`[CONTROLLER:User] ✓ Perfil actualizado para: ${updatedUser.email}`);
@@ -81,6 +113,10 @@ export const updateProfile = async (req, res, next) => {
     }
 };
 
+// --- ELIMINAR CUENTA ---
+// Eliminación permanente (hard delete). El usuario solo puede eliminar
+// su propia cuenta. Se devuelven los datos del usuario eliminado como
+// confirmación de qué se eliminó (ya no estará en la BD después).
 // DELETE /api/users/profile - Eliminar cuenta del usuario autenticado
 export const deleteProfile = async (req, res, next) => {
     console.log(`[CONTROLLER:User] Eliminando cuenta → userId: ${req.user.id}`);
