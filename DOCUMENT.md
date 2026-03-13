@@ -18,33 +18,40 @@ API RESTful desarrollada con **Node.js**, **Express 5**, **MySQL** y **Sequelize
 ├── 📁 agents/
 │   └── 📄 apiMentorAgent.md   # Agente mentor para desarrollo
 │
-└── 📁 src/
-    ├── 📄 server.js           # Punto de entrada: arranque secuencial del servidor
-    ├── 📄 app.js              # Configuración de Express (middleware global, rutas, log de peticiones)
+└── src/
+    ├── app.js              ← Configuración de Express (middlewares, rutas, motor de vistas)
+    ├── server.js           ← Punto de entrada: arranca el servidor y conecta a la BD
     │
-    ├── 📁 config/
-    │   └── 📄 database.js     # Conexión Sequelize + MySQL, sync de tablas
+    ├── config/
+    │   └── database.js     ← Conexión a MySQL con Sequelize (usa las variables de .env)
     │
-    ├── 📁 models/
-    │   ├── 📄 index.js        # Centralización y exportación de modelos
-    │   └── 📄 User.js         # Modelo User: esquema, hooks (bcrypt), métodos de instancia
+    ├── controllers/
+    │   ├── authController.js   ← Lógica de negocio de registro y login
+    │   └── userController.js   ← Lógica de negocio de perfil (ver, actualizar, eliminar)
     │
-    ├── 📁 controllers/
-    │   ├── 📄 authController.js   # Lógica de register() y login()
-    │   └── 📄 userController.js   # Lógica de getProfile(), updateProfile(), deleteProfile()
+    ├── middleware/
+    │   ├── authMiddleware.js   ← Verifica el token JWT en rutas protegidas
+    │   ├── errorHandler.js     ← Captura errores no manejados y responde con formato consistente
+    │   └── validation.js       ← Procesa los resultados de validación (handleValidationErrors, sanitizeInput)
     │
-    ├── 📁 routes/
-    │   ├── 📄 index.js        # Router principal: agrupa /auth y /users bajo /api
-    │   ├── 📄 authRoutes.js   # Rutas públicas: POST /register, POST /login
-    │   └── 📄 userRoutes.js   # Rutas privadas: GET/PUT/DELETE /profile (requieren JWT)
+    ├── models/
+    │   ├── User.js         ← Modelo Sequelize del usuario (define columnas, hooks para hashear password)
+    │   └── index.js        ← Exporta todos los modelos (punto central de acceso)
     │
-    ├── 📁 middleware/
-    │   ├── 📄 authMiddleware.js   # Verificación y decodificación de JWT
-    │   ├── 📄 validation.js       # handleValidationErrors() + sanitizeInput()
-    │   └── 📄 errorHandler.js     # Manejo centralizado de errores (Sequelize, JWT, JSON, etc.)
+    ├── routes/
+    │   ├── index.js        ← Ruta raíz (sirve la vista EJS del panel de pruebas)
+    │   ├── authRoutes.js   ← Rutas /api/auth/* (register, login)
+    │   └── userRoutes.js   ← Rutas /api/users/* (profile CRUD)
     │
-    └── 📁 utils/
-        └── 📄 validators.js      # Esquemas de validación con express-validator
+    ├── utils/
+    │   └── validators.js   ← Reglas declarativas de validación con express-validator
+    │
+    ├── views/
+    │   └── index.ejs       ← Frontend HTML del panel de pruebas
+    │
+    └── public/
+        └── css/
+            └── styles.css  ← Estilos del panel de pruebas
 ```
 
 ---
