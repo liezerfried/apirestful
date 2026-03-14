@@ -2,30 +2,79 @@
 
 ## Descripción
 
-Este proyecto es una API RESTful desarrollada con Node.js y Express que permite gestionar usuarios con un sistema de autenticación basado en JSON Web Tokens (JWT). La aplicación utiliza MySQL como base de datos y Sequelize como ORM para interactuar con ella.
+Este proyecto es una API RESTful desarrollada con Node.js y Express que permite gestionar usuarios con un sistema de autenticación basado en JSON Web Tokens (JWT). Utiliza MySQL como base de datos y Sequelize como ORM.
 
 El objetivo principal es proporcionar una estructura base para aplicaciones que requieran registro de usuarios, inicio de sesión y gestión de perfiles, siguiendo buenas prácticas de seguridad y organización de código.
 
 ## Funcionalidades
 
-La API permite a los usuarios registrarse con su nombre, correo electrónico y contraseña. Una vez registrados, pueden iniciar sesión para obtener un token JWT que les permite acceder a rutas protegidas. Con este token, los usuarios pueden consultar su perfil, actualizar sus datos personales o eliminar su cuenta.
-
-Las contraseñas se almacenan de forma segura utilizando bcrypt, que aplica un algoritmo de hashing con salt para evitar que sean legibles directamente en la base de datos. Además, todas las entradas de usuario pasan por un proceso de validación y sanitización antes de ser procesadas.
+- Registro de usuarios (nombre, correo electrónico y contraseña).
+- Inicio de sesión y obtención de token JWT.
+- Consulta, actualización y eliminación de perfil de usuario autenticado.
+- Contraseñas almacenadas de forma segura con bcrypt.
+- Validación y sanitización de entradas de usuario.
 
 ## Tecnologías utilizadas
 
-El backend está construido con Express 5, un framework minimalista para Node.js que facilita la creación de servidores HTTP. Para la persistencia de datos se utiliza MySQL junto con Sequelize, un ORM que permite definir modelos y realizar consultas sin escribir SQL directamente.
-
-La autenticación se implementa con jsonwebtoken, una librería que permite generar y verificar tokens JWT. Para la validación de datos se usa express-validator, que proporciona un conjunto de middlewares para verificar y sanear los datos recibidos en las peticiones.
-
-El proyecto también incluye un panel de pruebas visual desarrollado con EJS, un motor de plantillas que permite renderizar HTML desde el servidor. Este panel facilita probar los endpoints sin necesidad de herramientas externas.
+- Node.js y Express
+- MySQL y Sequelize
+- JWT (jsonwebtoken)
+- bcrypt
+- express-validator
+- EJS (panel de pruebas visual)
 
 ## Arquitectura
 
-El código sigue una arquitectura por capas separando responsabilidades: los controladores manejan la lógica de negocio, los modelos definen la estructura de datos, las rutas agrupan los endpoints, y los middlewares procesan las peticiones antes de llegar a los controladores.
-
-El servidor inicia de forma secuencial, primero estableciendo la conexión con la base de datos, luego inicializando los modelos de Sequelize, sincronizando las tablas y finalmente levantando el servidor HTTP para aceptar peticiones.
+El código sigue una arquitectura por capas: controladores (lógica de negocio), modelos (estructura de datos), rutas (endpoints) y middlewares (procesamiento de peticiones).
 
 ## Seguridad
 
-Se implementan varias medidas de seguridad: las contraseñas nunca se almacenan en texto plano gracias a bcrypt, los tokens JWT tienen una duración limitada y se firman con una clave secreta, los datos de entrada se validan y sanitizan para prevenir inyecciones, y el campo de contraseña se excluye automáticamente de las respuestas JSON para evitar exposición accidental.
+- Contraseñas hasheadas con bcrypt.
+- Tokens JWT con expiración y clave secreta.
+- Validación y sanitización de datos de entrada.
+- El campo de contraseña no se expone en las respuestas JSON.
+
+## Variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto (puedes copiar el archivo `.env.example` como base) y completa los siguientes valores:
+
+```
+DB_HOST=localhost
+DB_USER=usuario
+DB_PASSWORD=contraseña
+DB_NAME=apirestful
+JWT_SECRET=tu_clave_secreta
+```
+
+## Creación de la base de datos
+
+Ejecuta el archivo `init.sql` incluido en la raíz del proyecto en tu servidor MySQL para crear la base de datos y la tabla de usuarios:
+
+```sql
+CREATE DATABASE IF NOT EXISTS apirestful;
+USE apirestful;
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  createdAt DATETIME NOT NULL,
+  updatedAt DATETIME NOT NULL
+);
+```
+
+## Pasos para probar el panel EJS
+
+1. Ejecuta el archivo `init.sql` en tu servidor MySQL.
+2. Configura el archivo `.env` con los datos de tu base de datos.
+3. Instala las dependencias con `npm install`.
+4. Inicia la aplicación con `npm run dev`.
+5. Accede al panel visual (EJS) en tu navegador y prueba los formularios.
+
+---
+
+**Nota:** Si tienes dudas sobre cómo ejecutar el archivo SQL, puedes usar herramientas como MySQL Workbench o el comando `mysql` en terminal:
+
+```
+mysql -u usuario -p < init.sql
+```
