@@ -1,54 +1,54 @@
-# API RESTful - Gestión de Usuarios
+# RESTful API - User Management
 
-## Descripción
+## Description
 
-Este proyecto es una API RESTful desarrollada con Node.js y Express que permite gestionar usuarios con un sistema de autenticación basado en JSON Web Tokens (JWT). Utiliza MySQL como base de datos y Sequelize como ORM.
+This project is a RESTful API built with Node.js and Express for managing users with a JWT-based authentication system. It uses MySQL as the database and Sequelize as the ORM.
 
-El objetivo principal es proporcionar una estructura base para aplicaciones que requieran registro de usuarios, inicio de sesión y gestión de perfiles, siguiendo buenas prácticas de seguridad y organización de código.
+The main goal is to provide a base structure for applications that require user registration, login, and profile management, following security best practices and clean code organization.
 
-## Funcionalidades
+## Features
 
-- Registro de usuarios (nombre, correo electrónico y contraseña).
-- Inicio de sesión y obtención de token JWT.
-- Consulta, actualización y eliminación de perfil de usuario autenticado.
-- Contraseñas almacenadas de forma segura con bcrypt.
-- Validación y sanitización de entradas de usuario.
+- User registration (name, email, and password).
+- Login and JWT token retrieval.
+- Query, update, and delete authenticated user profile.
+- Passwords stored securely with bcrypt.
+- Input validation and sanitization.
 
-## Tecnologías utilizadas
+## Technologies used
 
-- Node.js y Express
-- MySQL y Sequelize
+- Node.js and Express
+- MySQL and Sequelize
 - JWT (jsonwebtoken)
 - bcrypt
 - express-validator
-- EJS (panel de pruebas visual)
+- EJS (visual test panel)
 
-## Arquitectura
+## Architecture
 
-El código sigue una arquitectura por capas: controladores (lógica de negocio), modelos (estructura de datos), rutas (endpoints) y middlewares (procesamiento de peticiones).
+The code follows a layered architecture: controllers (business logic), models (data structure), routes (endpoints), and middlewares (request processing).
 
-## Seguridad
+## Security
 
-- Contraseñas hasheadas con bcrypt.
-- Tokens JWT con expiración y clave secreta.
-- Validación y sanitización de datos de entrada.
-- El campo de contraseña no se expone en las respuestas JSON.
+- Passwords hashed with bcrypt.
+- JWT tokens with expiration and secret key.
+- Input data validation and sanitization.
+- The password field is not exposed in JSON responses.
 
-## Variables de entorno
+## Environment variables
 
-Crea un archivo `.env` en la raíz del proyecto (puedes copiar el archivo `.env.example` como base) y completa los siguientes valores:
+Create a `.env` file in the project root (you can copy `.env.example` as a base) and fill in the following values:
 
 ```
 DB_HOST=localhost
-DB_USER=usuario
-DB_PASSWORD=contraseña
+DB_USER=your_user
+DB_PASSWORD=your_password
 DB_NAME=apirestful
-JWT_SECRET=tu_clave_secreta
+JWT_SECRET=your_secret_key
 ```
 
-## Creación de la base de datos
+## Database setup
 
-Ejecuta el archivo `init.sql` incluido en la raíz del proyecto en tu servidor MySQL para crear la base de datos y la tabla de usuarios:
+Run the `init.sql` file included in the project root on your MySQL server to create the database and users table:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS apirestful;
@@ -63,18 +63,18 @@ CREATE TABLE IF NOT EXISTS users (
 );
 ```
 
-## Pasos para probar el panel EJS
+## Steps to test the EJS panel
 
-1. Ejecuta el archivo `init.sql` en tu servidor MySQL.
-2. Configura el archivo `.env` con los datos de tu base de datos.
-3. Instala las dependencias con `npm install`.
-4. Inicia la aplicación con `npm run dev`.
-5. Accede al panel visual (EJS) en tu navegador y prueba los formularios.
+1. Run the `init.sql` file on your MySQL server.
+2. Configure the `.env` file with your database credentials.
+3. Install dependencies with `npm install`.
+4. Start the application with `npm run dev`.
+5. Open the visual panel (EJS) in your browser and test the forms.
 
 ---
 
-**Nota:** Si tienes dudas sobre cómo ejecutar el archivo SQL, puedes usar herramientas como MySQL Workbench o el comando `mysql` en terminal:
+**Note:** If you are unsure how to run the SQL file, you can use tools like MySQL Workbench or the `mysql` command in the terminal:
 
 ```
-mysql -u usuario -p < init.sql
+mysql -u your_user -p < init.sql
 ```
