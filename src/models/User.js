@@ -61,6 +61,16 @@ class User extends Model {
                     console.log(`[MODEL:User] Hook beforeCreate → Encriptando contraseña para: ${user.email}`);
                     user.password = await bcrypt.hash(user.password, 10);
                     console.log('[MODEL:User] Contraseña encriptada correctamente');
+                },
+                // Hook beforeUpdate: se ejecuta AUTOMÁTICAMENTE antes de cada user.update().
+                // Solo encripta si el campo password fue modificado, evitando re-hashear
+                // el hash ya almacenado cuando se actualizan otros campos (name, email).
+                beforeUpdate: async (user) => {
+                    if (user.changed('password')) {
+                        console.log(`[MODEL:User] Hook beforeUpdate → Encriptando nueva contraseña para: ${user.email}`);
+                        user.password = await bcrypt.hash(user.password, 10);
+                        console.log('[MODEL:User] Contraseña actualizada y encriptada correctamente');
+                    }
                 }
             }
         });

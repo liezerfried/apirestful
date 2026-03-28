@@ -15,9 +15,6 @@ RESTful API built with **Node.js**, **Express 5**, **MySQL**, and **Sequelize** 
 ├── 📄 TASK.md                 # Original project assignment
 ├── 📄 DOCUMENT.md             # This documentation
 │
-├── 📁 agents/
-│   └── 📄 apiMentorAgent.md   # Mentor agent for development
-│
 └── src/
     ├── app.js              ← Express configuration (middlewares, routes, view engine)
     ├── server.js           ← Entry point: starts the server and connects to DB

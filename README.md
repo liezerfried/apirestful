@@ -42,7 +42,7 @@ Create a `.env` file in the project root (you can copy `.env.example` as a base)
 DB_HOST=localhost
 DB_USER=your_user
 DB_PASSWORD=your_password
-DB_NAME=apirestful
+DB_NAME=api_restful
 JWT_SECRET=your_secret_key
 ```
 
@@ -51,8 +51,8 @@ JWT_SECRET=your_secret_key
 Run the `init.sql` file included in the project root on your MySQL server to create the database and users table:
 
 ```sql
-CREATE DATABASE IF NOT EXISTS apirestful;
-USE apirestful;
+CREATE DATABASE IF NOT EXISTS api_restful;
+USE api_restful;
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
