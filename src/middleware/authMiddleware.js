@@ -66,7 +66,6 @@ export const authenticateToken = async (req, res, next) => {
 
         // 4. Agregar usuario a la request para uso en controladores
         req.user = user;
-        req.userId = user.id;
         console.log(`[AUTH] ✓ Usuario autenticado: ${user.email} (id: ${user.id})`);
         
         // 5. Continuar al siguiente middleware/controlador

@@ -20,8 +20,7 @@
 // Estas reglas NO envían respuesta; solo acumulan errores que luego
 // handleValidationErrors() (validation.js) revisa y responde.
 //
-// Exporta: { registerValidation, loginValidation, updateProfileValidation, 
-//            idValidation, emailValidation, passwordValidation }
+// Exporta: { registerValidation, loginValidation, updateProfileValidation }
 // ============================================================================
 
 import { body } from 'express-validator';
@@ -110,37 +109,4 @@ export const updateProfileValidation = [
         .withMessage('La contraseña debe tener al menos 6 caracteres')
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
         .withMessage('La contraseña debe contener al menos: 1 minúscula, 1 mayúscula y 1 número')
-];
-
-// ======================================
-// VALIDACIONES GENERALES
-// ======================================
-
-/**
- * Validación para ID de parámetros
- */
-export const idValidation = [
-    body('id')
-        .isInt({ min: 1 })
-        .withMessage('El ID debe ser un número entero positivo')
-];
-
-/**
- * Validación solo para email
- */
-export const emailValidation = [
-    body('email')
-        .trim()
-        .isEmail()
-        .withMessage('Debe ser un email válido')
-        .normalizeEmail()
-];
-
-/**
- * Validación solo para password
- */
-export const passwordValidation = [
-    body('password')
-        .isLength({ min: 6 })
-        .withMessage('La contraseña debe tener al menos 6 caracteres')
 ];

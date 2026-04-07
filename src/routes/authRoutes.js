@@ -51,32 +51,4 @@ router.post('/login',
     login                    // 4. Ejecutar controlador
 );
 
-// ======================================
-// RUTAS ADICIONALES (FUTURAS)
-// ======================================
-
-/**
- * @route   POST /api/auth/logout
- * @desc    Cerrar sesión (invalidar token)
- * @access  Privado
- * @future  Implementación futura con blacklist de tokens
- */
-// router.post('/logout', authenticateToken, logout);
-
-/**
- * @route   POST /api/auth/refresh
- * @desc    Renovar token JWT
- * @access  Privado  
- * @future  Implementación futura con refresh tokens
- */
-// router.post('/refresh', authenticateToken, refreshToken);
-
-/**
- * @route   GET /api/auth/verify
- * @desc    Verificar si token es válido
- * @access  Privado
- * @future  Útil para frontend
- */
-// router.get('/verify', authenticateToken, verifyToken);
-
 export default router;

@@ -32,13 +32,4 @@ console.log('[MODELS] Modelo User registrado en Sequelize');
 // Exportar modelos
 export { User };
 
-// Exportar función para inicializar todos los modelos
-export const initModels = async () => {
-    try {
-        console.log('[MODELS] Verificando configuración de modelos...');
-        console.log('[MODELS] ✅ Modelos inicializados correctamente');
-    } catch (error) {
-        console.error('[MODELS] ❌ Error inicializando modelos:', error.message);
-        throw error;
-    }
-};
+export const initModels = async () => {};
